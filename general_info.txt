@@ -1,0 +1,30 @@
+This repository contains the full scripts for the analysis of NGS-MRD sequencing data as a part of my thesis.
+Scripts are in subfolder ./scripts, run-info file needs to be filled out for each seperate run, containing the following information:
+
+run-info file:
+#############################################################################################################################################
+Number	Sample	Primer	Chr	Coordinate	Variant	MID_F	MID_R
+1	X001	IDH2_145	chr15	90631837	C>A	MID5	MID2
+2	X002	NRAS_1	chr1	115258747	C>A	MID7	MID2
+...
+
+Primer and adapter info can be stored in the ./seqs folder. Primer and adapter file should contain the following information:
+
+gPrimer-file:
+#############################################################################################################################################
+PrimerID	Primer	Gene	Chr_1	Strand_1	FirstBase_1	Seq_1	Chr_2	Strand_2	FirstBase_2	Seq_2
+1	IDH2_145	IDH2	chr15	-	90631920	TATCCGGAACATCCTGGGG	chr15	+	90631818	CCTCTCCACCCTGGCCTA
+2	NRAS_1	NRAS	chr1	-	115258814	GCTCGCCAATTAACCCTGAT	chr1	+	115258721	AGTGGTTCTGGATTAGCTGGA
+...
+
+Sample identifiers (MIDs):
+#############################################################################################################################################
+Primername	Stockname	Spacer_Sequence	Spacer_Length	MID_Sequence
+MID5	CuPr_MID5_CS3_F	act	3	ATCAGACACG
+MID7	CuPr_MID7_CS3_F	acta	4	CGTGTCTCTA
+MID2	CuPr_MID2_CS4_R	t	1	ACGCTCGACA
+...
+
+
+Main folder ./ contains bash script that pieces the scripts together in the intended order, scripts can also be run seperately. Standard work-flow contains the steps:
+Demultiplexing (DemuxRun.py) -> Adapter removal and detection of RF-tags (CutAdaptersRun.py) -> Basic quality filtering (QFilterRun.py) -> Merge reads to form R1/R2 consensus sequences (MergeRun.py) -> Alignment of reads with Burrows-Wheeler-Aligner (bwa) -> Pileup of reads (PileupReadsRun.py) and RFs (PileupRFRun.py) -> Formal testing for positivity of target-mutations (WriteXLSX.py) -> Optional output of plots for visualization (PlotRun.py)
